@@ -8,6 +8,7 @@ const double omega2=omega*omega;
 
 double f1(double t, double x1, double x2){
   return -omega2*x2;}
+
 double f2(double t, double x1, double x2){
 return x1;
 }
