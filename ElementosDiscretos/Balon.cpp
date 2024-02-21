@@ -90,16 +90,16 @@ int main(int argc, char *argv[]){
 
   double t,dt=0.001;
   Objeto Balon;
-  InicieAnimacion();
+  //InicieAnimacion();
   Balon.Inicie(0,0,16,9,0.453,2);
 
   for (t=0;t<2.5;t+=dt) {
-    InicieCuadro();
-    Balon.Dibujese();
-    //cout<<Balon.Getx()<<" "<<Balon.Gety()<<endl;
+    //InicieCuadro();
+    //Balon.Dibujese();
+    cout<<Balon.Getx()<<" "<<Balon.Gety()<<endl;
                                            Balon.CalculeFuerza();
                                            Balon.Muevase(dt);
-                                           TermineCuadro();
+    //                                       TermineCuadro();
   }
                         return 0;
 }
