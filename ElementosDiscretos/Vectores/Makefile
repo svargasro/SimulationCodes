@@ -1,8 +1,8 @@
 all: Planeta.pdf
 
 
-Planeta.x: Planeta.cpp
-	g++ Planeta.cpp -o Planeta.x
+PlanetaConstructor.x: PlanetaConstructor.cpp
+	g++ PlanetaConstructor.cpp -o PlanetaConstructor.x
 
 
 
@@ -13,8 +13,8 @@ Planeta.x: Planeta.cpp
 #Si cambia sumupdown, entonces actualice data.txt
 
 
-data.txt: Planeta.x
-	./Planeta.x > data.txt
+data.txt: PlanetaConstructor.x
+	./PlanetaConstructor.x > data.txt
 
 
 Planeta.pdf: data.txt plot.gp
