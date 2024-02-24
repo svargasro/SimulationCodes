@@ -4,7 +4,7 @@ import matplotlib.animation as animation
 
 g=9.8
 Deltat=0.001
-Nsteps=200000
+Nsteps= 50
 G=M=1.0
 
 
@@ -35,8 +35,11 @@ for i in range(Nsteps):
     t=i*Deltat
     xdata[i] = Balon.r[0]
     ydata[i] = Balon.r[1]
+    #print(xdata[i], " ", ydata[i])
     Balon.CalculeFuerza()
     Balon.Muevase(Deltat)
 
-plt.plot(xdata,ydata)
-plt.show()
+#print(xdata, " ", ydata)
+
+#plt.plot(xdata,ydata)
+#plt.show()
