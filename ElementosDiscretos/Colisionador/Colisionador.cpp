@@ -27,6 +27,7 @@ public:
               double Vx0,double Vy0,double Vz0,double m0,double R0);
   void BorreFuerza(void){F.load(0,0,0);};// Inline
   void SumeFuerza(vector3D dF){F+=dF;};// Inline
+
   void Mueva_r(double dt,double coeficiente);
   void Mueva_V(double dt,double coeficiente);
   void Dibujese(void);
@@ -123,7 +124,7 @@ int main(){
 
   //     tdibujo=0;
   //   }
-  cout<<Planeta[1].Getx()<<" "<<Planeta[1].Gety()<<endl;
+  cout<<Planeta[0].Getx()<<" "<<Planeta[0].Gety()<<endl;
 
   for(i=0;i<N;i++) Planeta[i].Mueva_r(dt,xi);
   Newton.CalculeTodasLasFuerzas(Planeta); for(i=0;i<N;i++) Planeta[i].Mueva_V(dt,Um2lambdau2);
