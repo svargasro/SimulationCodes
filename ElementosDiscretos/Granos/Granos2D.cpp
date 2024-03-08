@@ -109,11 +109,16 @@ void Colisionador::CalculeFuerzaEntre(Cuerpo & Grano1,Cuerpo & Grano2){
     F2 = (-Gamma*sqrt(s)*m12)*Vcn;
     Grano2.SumeFuerza(F2,0);  Grano1.SumeFuerza(F2*(-1),0);
 
-
-
-
   }
 }
+
+void Colisionador::Inicie(void){
+  int i,j; //j>i
+  for(i=0;i<Ntot;i++)
+    for(j=0;j<Ntot;j++)
+      xCundall[i][j]=sold[i][j]=0;
+}
+
 //----------- Funciones Globales -----------
 //---Funciones de Animacion---
 void InicieAnimacion(void){
