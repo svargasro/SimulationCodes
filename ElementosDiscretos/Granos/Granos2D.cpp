@@ -42,11 +42,9 @@ public:
 };
 class Colisionador{
 private:
-  double xCundall[Ntot][Ntot],sold[Ntot][Ntot];
 public:
-  void Inicie(void);
   void CalculeTodasLasFuerzas(Cuerpo * Planetas);
-  void CalculeFuerzaEntre(Cuerpo & Planeta1,Cuerpo & Planeta2);
+  void CalculeFuerzaEntre(Cuerpo & Grano1,Cuerpo & Grano2);
 };
 
 //-------Implementar las funciones de las clases------
@@ -101,23 +99,23 @@ void Colisionador::CalculeFuerzaEntre(Cuerpo & Grano1,Cuerpo & Grano2){
     //Las sumo a los granos
     Grano2.SumeFuerza(F2,0);  Grano1.SumeFuerza(F2*(-1),0);
     //Calcule Fuerza Tangencial
-    vector3D Rw; Rw.load(0,0,R2*Grano2.omega - R1*Grano1.omega);
+    vector3D Rw; Rw.load(0,0,R2*Grano2.omega +  R1*Grano1.omega);
     vector3D Vc = (Grano2.V - Grano1.V) - (Rw^n);
     vector3D Vcn = n*(Vc*n), Vct= Vc-Vcn;
+
+
     //Suma la fuerza de deformación plástica normal (Kuramoto-Kano)
     double m1 = Grano1.m; double m2=Grano2.m; double m12 = m1*m2/(m1+m2);
     F2 = (-Gamma*sqrt(s)*m12)*Vcn;
     Grano2.SumeFuerza(F2,0);  Grano1.SumeFuerza(F2*(-1),0);
 
+    //Calculo la fuerza tangencial
+
+
   }
 }
 
-void Colisionador::Inicie(void){
-  int i,j; //j>i
-  for(i=0;i<Ntot;i++)
-    for(j=0;j<Ntot;j++)
-      xCundall[i][j]=sold[i][j]=0;
-}
+
 
 //----------- Funciones Globales -----------
 //---Funciones de Animacion---
