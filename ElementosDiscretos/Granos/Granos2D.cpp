@@ -11,6 +11,7 @@ const int N=Nx*Ny;
 const double g=9.8;
 const double KHertz=1.0e4;
 const double Gamma = 150;
+const double Kcundall= 500, mu=0.4;
 
 //Constantes del algoritmo de integración
 const double xi=0.1786178958448091;
@@ -41,7 +42,9 @@ public:
 };
 class Colisionador{
 private:
+  double xCundall[Ntot][Ntot],sold[Ntot][Ntot];
 public:
+  void Inicie(void);
   void CalculeTodasLasFuerzas(Cuerpo * Planetas);
   void CalculeFuerzaEntre(Cuerpo & Planeta1,Cuerpo & Planeta2);
 };
