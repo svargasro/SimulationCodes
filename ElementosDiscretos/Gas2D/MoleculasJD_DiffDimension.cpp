@@ -5,11 +5,11 @@
 using namespace std;
 
 //Constantes del problema físico
-double Lx=60, Ly=60; 
+double Lx=120, Ly=120;
 const int Nx=5, Ny=5;
 const int N=Nx*Ny;
 const double G=1.0;
-const double KHertz=1.0e4;
+const double KHertz= 1.0e4*(1/16.0) ;
 
 //Constantes del algoritmo de integración
 const double xi=0.1786178958448091;
@@ -115,14 +115,14 @@ int main(){
   Crandom ran64(1);
   int i,ix,iy;
   //Parametros de la simulación
-  double m0=1.0; double R0=2.0;
+  double m0=sqrt(2); double R0=4.0;
   double kT=10; 
   //Variables auxiliares para la condición inicial
   double dx=Lx/(Nx+1),dy=Ly/(Ny+1);
-  double theta; double V0=sqrt(kT/m0);
+  double theta; double V0=sqrt(kT/m0)*(1/2.0);
   double x0,y0,Vx0,Vy0;
   //Variables auxiliares para correr la simulacion
-  int Ncuadros=1000; double t,tdibujo,dt=1e-3,tmax=10*Lx/V0,tcuadro=tmax/Ncuadros;
+  int Ncuadros=1000; double t,tdibujo,dt=4e-3,tmax=10*Lx/V0,tcuadro=tmax/Ncuadros;
 
   InicieAnimacion();
   
