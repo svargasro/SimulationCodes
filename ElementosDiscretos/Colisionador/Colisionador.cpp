@@ -78,8 +78,8 @@ void Colisionador::CalculeFuerzaEntre(Cuerpo & Planeta1,Cuerpo & Planeta2){
 //----------- Funciones Globales -----------
 //---Funciones de Animacion---
 void InicieAnimacion(void){
-  //  cout<<"set terminal gif animate"<<endl; 
-  //  cout<<"set output 'UnBalon.gif'"<<endl;
+   // cout<<"set terminal gif animate"<<endl;
+   // cout<<"set output 'Colisionador.gif'"<<endl;
   cout<<"unset key"<<endl;
   cout<<"set xrange[-11:11]"<<endl;
   cout<<"set yrange[-11:11]"<<endl;
@@ -101,30 +101,32 @@ int main(){
   double x0=-m1*r/M,x1=m0*r/M;
   double omega=sqrt(G*M/(r*r*r)); double T=2*M_PI/omega;
   double V0=omega*x0, V1=omega*x1;
-  double t,dt=0.1,ttotal=T;
-  int Ncuadros=30000; double tdibujo,tcuadro=ttotal/Ncuadros;
+  double t,dt=0.01,ttotal=T;
+
+  int Ncuadros=30000; double tdibujo,tcuadro = ttotal/Ncuadros;
   Cuerpo Planeta[N];
   Colisionador Newton;
   int i;
 
-//  InicieAnimacion();
+ InicieAnimacion();
   
   //INICIO
   //---------------(x0,y0,z0,Vx0,   Vy0,Vz0,m0,R0)
   Planeta[0].Inicie(x0, 0, 0,  0, 0.5*V0,  0,m0,1.0);
   Planeta[1].Inicie(x1, 0, 0,  0, 0.5*V1,  0,m1,0.5);
   //CORRO
+  cout<<tcuadro<<endl;
   for(t=tdibujo=0;t<ttotal;t+=dt,tdibujo+=dt){
 
-  //   if(tdibujo>tcuadro){
+    if(tdibujo>tcuadro){
 
-  //     InicieCuadro();
-  //     for(i=0;i<N;i++) Planeta[i].Dibujese();
-  //     TermineCuadro();
+      InicieCuadro();
+      for(i=0;i<N;i++) Planeta[i].Dibujese();
+      TermineCuadro();
 
-  //     tdibujo=0;
-  //   }
-  cout<<Planeta[0].Getx()<<" "<<Planeta[0].Gety()<<endl;
+      tdibujo=0;
+    }
+//  cout<<Planeta[0].Getx()<<" "<<Planeta[0].Gety()<<endl;
 
   for(i=0;i<N;i++) Planeta[i].Mueva_r(dt,xi);
   Newton.CalculeTodasLasFuerzas(Planeta); for(i=0;i<N;i++) Planeta[i].Mueva_V(dt,Um2lambdau2);
