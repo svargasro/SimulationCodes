@@ -7,10 +7,10 @@ using namespace std;
 
 //Constantes del problema físico
 double Lx=9, Ly=12;
-const int Nx=1, Ny=1;
+const int Nx=3, Ny=1;
 const int N=Nx*Ny;
 const double G=1.0;
-const double KHertz=1.0e4;
+const double KHertz=20e10;
 const double g=9.8;
 //Constantes del algoritmo de integración
 const double xi=0.1786178958448091;
@@ -26,10 +26,11 @@ class Colisionador;
 //--------- Declarar las interfases de las clases---------
 class Cuerpo{
   private:
-    vector3D r,V,F; double m,R;
+
   public:
+    vector3D r,V,F; double m,R,xp,yp;
     void Inicie(double x0,double y0,double z0,
-                double Vx0,double Vy0,double Vz0,double m0,double R0);
+                double Vx0,double Vy0,double Vz0,double m0,double R0, double Xp, double Yp);
     void BorreFuerza(void){F.load(0,0,0);};// Inline
     void SumeFuerza(vector3D dF){F+=dF;};// Inline
     void Mueva_r(double dt,double coeficiente);
@@ -52,8 +53,9 @@ class Colisionador{
 //-------Implementar las funciones de las clases------
 //------- Funciones de la clase cuerpo --------
 void Cuerpo::Inicie(double x0,double y0,double z0,
-                    double Vx0,double Vy0,double Vz0,double m0,double R0){
+                    double Vx0,double Vy0,double Vz0,double m0,double R0, double Xp, double Yp){
   r.load(x0,y0,z0);  V.load(Vx0,Vy0,Vz0); m=m0; R=R0;
+  xp = Xp; yp = Yp;
 }
 void Cuerpo::Mueva_r(double dt,double coeficiente){
   r+=V*(coeficiente*dt);
@@ -62,8 +64,15 @@ void Cuerpo::Mueva_V(double dt,double coeficiente){
   V+=F*(coeficiente*dt/m);
 }
 void Cuerpo::Dibujese(void){
-  cout<<" , "<<r.x()<<"+"<<R<<"*cos(t),"<<r.y()<<"+"<<R<<"*sin(t)";
+  double x=r.x();
+  double y = r.y();
+  cout<<" , "<<x<<"+"<<R<<"*cos(t),"<<y<<"+"<<R<<"*sin(t)";
+  cout<<" , (1- (t/7))*"<<x<<"+ (t/7)*"<<xp<<", (1- (t/7))*"<<y<<"+ (t/7)*"<<yp;
+
 }
+
+
+
 //------- Funciones de la clase Colisionador --------
 void Colisionador::CalculeTodasLasFuerzas(Cuerpo * Molecula){
   int i,j;
@@ -78,8 +87,8 @@ void Colisionador::CalculeTodasLasFuerzas(Cuerpo * Molecula){
     double y = Molecula[i].r.y();
     double v2 = Molecula[i].V.norm2();
     double m = Molecula[i].m;
-    double xp = 0;
-    double l = 12e-2;
+    double xp = Molecula[i].xp;
+    double l = Molecula[i].yp;
     double sinMol = (x-xp)/l;
     double cosMol = (l-y)/l;
     double T= m*v2/l + g*m*cosMol;
@@ -93,17 +102,17 @@ void Colisionador::CalculeTodasLasFuerzas(Cuerpo * Molecula){
   //   Molecula[i].SumeFuerza(Fg);
   //}
 
-
+  //N=3
   //Recorro por parejas, calculo la fuerza de cada pareja y se la sumo a los dos
   for(i=0;i<N;i++)
-    for(j=i+1;j<N+4;j++)
-      CalculeFuerzaEntre(Molecula[i],Molecula[j]);
+    for(j=i+1;j<N;j++)
+      // Molecula[i].r;
+     CalculeFuerzaEntre(Molecula[i],Molecula[j]);
 }
 void Colisionador::CalculeFuerzaEntre(Cuerpo & Molecula1,Cuerpo & Molecula2){
   //Determinar si hay colision
   vector3D r21=Molecula2.r-Molecula1.r; double d=r21.norm();
   double s=(Molecula1.R+Molecula2.R)-d;
-  s=-1;
   if(s>0){ //Si hay colisión
     //Calcular el vector normal
     vector3D n=r21*(1.0/d);
@@ -116,8 +125,8 @@ void Colisionador::CalculeFuerzaEntre(Cuerpo & Molecula1,Cuerpo & Molecula2){
 //----------- Funciones Globales -----------
 //---Funciones de Animacion---
 void InicieAnimacion(void){
-  // cout<<"set terminal gif animate"<<endl;
-  // cout<<"set output 'cunaNewton.gif'"<<endl;
+  cout<<"set terminal gif animate"<<endl;
+  cout<<"set output 'cunaNewton.gif'"<<endl;
   cout<<"unset key"<<endl;
   cout<<"set xrange[-12e-2:15e-2]"<<endl;
   cout<<"set yrange[-4e-2:12e-2]"<<endl;
@@ -149,8 +158,8 @@ int main(){
   double w0 = sqrt(g/12e-2);
   double T = 2*M_PI/w0;
   //Variables auxiliares para correr la simulacion
-  int Ncuadros=20; double t,tdibujo,dt=0.0001,tmax=T,tcuadro=tmax/Ncuadros;
-
+  int Ncuadros=200; double t,tdibujo,dt=1e-6,tmax=T,tcuadro=tmax/Ncuadros;
+  //1000
   InicieAnimacion();
   
   //INICIO
@@ -170,17 +179,22 @@ int main(){
 
   double l0 = 12e-2;
 
-  double theta0 = 15*M_PI/180.0;
-  double x00 = l0*cos(-theta0);
-  double y00 = l0*sin(-theta0);
+  double theta0 = 15.0*M_PI/180.0;
+  double x00 = -l0*sin(theta0);
+  double y00 = l0*(-cos(theta0)+1);
+  double xp0 = 0;
+  double yp0 = l0;
 
-  x00 = 12e-2;
-  y00 = 12e-2;
-  Molecula[0].Inicie(x00,y00,0,0,0,0,m0,R0);
+
+
+
+
+    //     //----------------(x0,y0,z0,Vx0,Vy0,Vz0,m0,R0,xp,yp)
+  Molecula[0].Inicie(x00,y00,0,0,0,0,m0,R0,xp0,yp0);
+
   for (int i=1;i<N;i++) {
-    Molecula[i].Inicie((i*2*R0),0,0,0,0,0,m0,R0);
+    Molecula[i].Inicie((i*2*R0),0,0,0,0,0,m0,R0,(i*2*R0),l0);
   }
-
 
 
 
@@ -190,12 +204,13 @@ int main(){
     if(tdibujo>tcuadro){
       
      InicieCuadro();
-     for(i=0;i<N;i++) Molecula[i].Dibujese();
+    for(i=0;i<N;i++) Molecula[i].Dibujese();
+     // Molecula[2].Dibujese();
      TermineCuadro();
       
       tdibujo=0;
     }
-//   cout<<Molecula[0].Getx()<<" "<<Molecula[0].Gety()<<endl;
+  clog<<t<<" "<<pow(Molecula[0].Gety() - Molecula[0].yp,2)+pow(Molecula[0].Getx()-Molecula[0].xp,2)<<endl;
 
     for(i=0;i<N;i++) Molecula[i].Mueva_r(dt,xi);
     Newton.CalculeTodasLasFuerzas(Molecula); for(i=0;i<N;i++) Molecula[i].Mueva_V(dt,Um2lambdau2);
