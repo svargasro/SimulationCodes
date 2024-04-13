@@ -64,8 +64,8 @@ void Objeto::Dibujese(void){
 
 
 void InicieAnimacion(void){
-  //cout<<"set terminal gif animate"<<endl;
-  //cout<<"set output 'UnBalon.gif'"<<endl;
+  cout<<"set terminal gif animate"<<endl;
+  cout<<"set output 'UnBalon.gif'"<<endl;
   cout<<"unset key"<<endl;
   cout<<"set xrange[-1:41]"<<endl;
   cout<<"set yrange[-10:8]"<<endl;
@@ -91,13 +91,15 @@ int main(int argc, char *argv[]){
 
   double t,dt=0.001;
   Objeto Balon;
- InicieAnimacion();
- Balon.Inicie(0,0,16,9,0.453,2);
+  InicieAnimacion();
+
+  //(x0, y0, Vx0, Vy0, m0, R0);
+  Balon.Inicie(0,0,16,9,0.453,2);
 
   for (t=0;t<2.5;t+=dt) {
     InicieCuadro();
     Balon.Dibujese();
-    cout<<Balon.Getx()<<" "<<Balon.Gety()<<endl;
+//    cout<<Balon.Getx()<<" "<<Balon.Gety()<<endl;
     Balon.CalculeFuerza();
     Balon.Muevase(dt);
     TermineCuadro();

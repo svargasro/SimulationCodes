@@ -2,6 +2,7 @@
 #include <cmath>
 #include "vector.h"
 #include "Random64.h"
+
 using namespace std;
 
 //Constantes del problema físico
@@ -103,8 +104,8 @@ void InicieCuadro(void){
     cout<<" , "<<Lx/7<<"*t,"<<Ly;     //pared de arriba
     cout<<" , 0,"<<Ly/7<<"*t";        //pared de la izquierda
     cout<<" , "<<Lx<<","<<Ly/7<<"*t"; //pared de la derecha
-
 }
+
 void TermineCuadro(void){
     cout<<endl;
 }
