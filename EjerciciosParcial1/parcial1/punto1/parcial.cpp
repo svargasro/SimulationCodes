@@ -109,8 +109,8 @@ int main(){
   double v0= 20;
   double vx0 = v0*cos(theta0), vy0=0, vz0=v0*sin(theta0);
   double r0= 0.22;
-  double t,dt=1e-4,ttotal= 2*vz0/9.8;
-  int Ncuadros=100; double tdibujo,tcuadro = ttotal/Ncuadros;
+  double t,dt=1e-3,ttotal= 2*vz0/9.8;
+  int Ncuadros=10000; double tdibujo,tcuadro = ttotal/Ncuadros;
   Cuerpo balon;
   Colisionador Newton;
   int i;

@@ -22,10 +22,10 @@ class Colisionador;
 //--------- Declarar las interfases de las clases---------
 class Cuerpo{
 private:
-  vector3D r,V,F; double m,R;
+  vector3D r,V,F; double m,R,rho;
 public:
   void Inicie(double x0,double y0,double z0,
-              double Vx0,double Vy0,double Vz0,double m0,double R0);
+              double Vx0,double Vy0,double Vz0,double m0,double R0, double rho0);
   void BorreFuerza(void){F.load(0,0,0);};// Inline
   void SumeFuerza(vector3D dF){F+=dF;};// Inline
 
@@ -47,8 +47,8 @@ public:
 //-------Implementar las funciones de las clases------
 //------- Funciones de la clase cuerpo --------
 void Cuerpo::Inicie(double x0,double y0,double z0,
-                    double Vx0,double Vy0,double Vz0,double m0,double R0){
-  r.load(x0,y0,z0);  V.load(Vx0,Vy0,Vz0); m=m0; R=R0;
+                    double Vx0,double Vy0,double Vz0,double m0,double R0, double rho0){
+  r.load(x0,y0,z0);  V.load(Vx0,Vy0,Vz0); m=m0; R=R0; rho=rho0;
 }
 void Cuerpo::Mueva_r(double dt,double coeficiente){
   r+=V*(coeficiente*dt);
@@ -64,10 +64,20 @@ void Colisionador::CalculeTodasLasFuerzas(Cuerpo &balon){
   int i,j;
   //Borro las fuerzas de todos los planetas
   balon.BorreFuerza();
+
+
   double g=9.8;
   vector3D Fg;
   Fg.load(0,0,-balon.m*g);
-  balon.SumeFuerza(Fg);
+  balon.SumeFuerza(Fg); //Fuerza de gravedad.
+
+  vector3D vBalon = balon.V;
+  double vNorm = vBalon.norm();
+  double rhoB = balon.rho;
+  double areaB = M_PI*pow(balon.R,2);
+  double cA = 0.5;
+  vector3D Farrastre = vBalon*(-0.5)*cA*rhoB*areaB*vNorm;
+  balon.SumeFuerza(Farrastre);
 
   //Recorro por parejas, calculo la fuerza de cada pareja y se la sumo a los dos
   // for(i=0;i<N;i++)
@@ -85,9 +95,9 @@ void Colisionador::CalculeFuerzaEntre(Cuerpo & balon1,Cuerpo & balon2){
 //---Funciones de Animacion---
 void InicieAnimacion(void){
    // cout<<"set terminal gif animate"<<endl;
-   // cout<<"set output 'Colisionador.gif'"<<endl;
+   // cout<<"set output 'balon.gif'"<<endl;
   cout<<"unset key"<<endl;
-  cout<<"set xrange[-1:30]"<<endl;
+  cout<<"set xrange[-1:14]"<<endl;
   cout<<"set yrange[0:5]"<<endl;
   cout<<"set size ratio -1"<<endl;
   cout<<"set parametric"<<endl;
@@ -109,21 +119,24 @@ int main(){
   double v0= 20;
   double vx0 = v0*cos(theta0), vy0=0, vz0=v0*sin(theta0);
   double r0= 0.22;
-  double t,dt=1e-4,ttotal= 2*vz0/9.8;
-  int Ncuadros=10000; double tdibujo,tcuadro = ttotal/Ncuadros;
+  double rho0 = 1.224;
+  double t,dt=1e-4,ttotal= 2*vz0/9.8; //Tiempo de vuelo sin fricción del aire. (Se verifica nuevamente 1e-4)
+  int Ncuadros=1000; double tdibujo,tcuadro = ttotal/Ncuadros;
   Cuerpo balon;
   Colisionador Newton;
   int i;
 
-//  double alcanceXTeorico = vx0*ttotal;
+ double alcanceXTeorico = vx0*ttotal; //Alcance en X solo con gravedad.
 
   InicieAnimacion();
   
   //INICIO
   //---------------(x0,y0,z0,Vx0,   Vy0,Vz0,m0,R0)
-  balon.Inicie(x0, y0, z0,  vx0, vy0, vz0,m0,r0);
+  balon.Inicie(x0, y0, z0,  vx0, vy0, vz0,m0,r0,rho0);
 
   clog<<dt<<"\t"<<dt<<endl; //Se pasa dt al archivo.
+
+
   //CORRO
   for(t=tdibujo=0;t<ttotal;t+=dt,tdibujo+=dt){
 
@@ -148,8 +161,9 @@ int main(){
   Newton.CalculeTodasLasFuerzas(balon); balon.Mueva_V(dt,Um2lambdau2);
   balon.Mueva_r(dt,xi);
 
+  if((balon.Getz())< 1e-3 && (t>ttotal/2.0)) break;
   }
-
+    clog<<alcanceXTeorico<<"\t"<<(balon.Getx())<<endl; //Se pasa al archivo la resta entre el valor del alcance de x sin fricció y con fricción.
 
 
 return 0;
