@@ -10,21 +10,14 @@ from scipy.stats import pearsonr
 def lineal_model(x, a, b):
     return a*x + b
 
-frecuencies = np.array((0.1,0.2,0.4,0.8,1.6,2.0,3.2))
 
-numberFrec = len(frecuencies)
-x = np.zeros(numberFrec)
-y = np.zeros(numberFrec)
-
-for i in range(numberFrec):
-    x[i],y[i] = np.genfromtxt(f'ydesvF{i}.txt', unpack=True, usecols=(0,1))
+frecuencies, xdesv, ydesv = np.genfromtxt('TablaydesvVSF_SinTorque.txt', unpack=True, usecols=(0,1,2),skip_header=1)
 
 
 fig, axes = plt.subplots(figsize=(6, 6))
 
 
-
-ydesv = np.log(-y)
+ydesv = np.log(np.abs(ydesv))
 frecuencies = np.log(frecuencies)
 
 parameters, covarian_matrix = curve_fit(lineal_model, frecuencies, ydesv)

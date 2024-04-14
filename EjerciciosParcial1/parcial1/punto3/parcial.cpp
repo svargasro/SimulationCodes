@@ -6,10 +6,6 @@
 #include "vector.h"
 using namespace std;
 
-//Constantes del problema físico
-const int N=1;
-const double G=1.0;
-
 
 //Constantes del algoritmo de integración
 const double xi=0.1786178958448091;
@@ -27,8 +23,7 @@ class Cuerpo{
 private:
   vector3D r,V,F,omega; double m,R,rho;
 public:
-  void Inicie(double x0,double y0,double z0,
-              double Vx0,double Vy0,double Vz0,double m0,double R0, double rho0, double omega0);
+  void Inicie(double x0,double y0,double z0, double Vx0,double Vy0,double Vz0,double m0,double R0, double rho0, double omega0); //Se agrega omega0.
   void BorreFuerza(void){F.load(0,0,0);};// Inline
   void SumeFuerza(vector3D dF){F+=dF;};// Inline
 
@@ -44,7 +39,6 @@ class Colisionador{
 private:
 public:
   void CalculeTodasLasFuerzas(Cuerpo &balon);
-  void CalculeFuerzaEntre(Cuerpo & balon1,Cuerpo & balon2);
 };
 
 //-------Implementar las funciones de las clases------
@@ -65,7 +59,7 @@ void Cuerpo::Dibujese(void){
 }
 //------- Funciones de la clase Colisionador --------
 void Colisionador::CalculeTodasLasFuerzas(Cuerpo &balon){
-  int i,j;
+
   //Borro las fuerzas de todos los planetas
   balon.BorreFuerza();
 
@@ -87,22 +81,12 @@ void Colisionador::CalculeTodasLasFuerzas(Cuerpo &balon){
   double cM = 1.0;
   vector3D omegaBalon = balon.omega;
   double angleZita = angle(omegaBalon,vBalon); //De la librería vector.h
-  vector3D omegaCrossV = omegaBalon^vBalon;
+  vector3D omegaCrossV = omegaBalon^vBalon; //De la liberraí vector.h
   vector3D FMagnus = -(0.5)*cM*rhoB*areaB*radioB*(1.0/sin(angleZita))*omegaCrossV;
   balon.SumeFuerza(FMagnus);
 
-  //Recorro por parejas, calculo la fuerza de cada pareja y se la sumo a los dos
-  // for(i=0;i<N;i++)
-  //   for(j=0;j<i;j++)
-  //     CalculeFuerzaEntre(balon[i],balon[j]);
 }
-void Colisionador::CalculeFuerzaEntre(Cuerpo & balon1,Cuerpo & balon2){
-  double m1=balon1.m, m2=balon2.m;
-  vector3D r21=balon2.r-balon1.r; double r2=r21.norm2();
-  double aux=G*m2*m1*pow(r2,-1.5);
-  vector3D F1=r21*aux;
-  balon1.SumeFuerza(F1);  balon2.SumeFuerza(F1*(-1));
-}
+
 //----------- Funciones Globales -----------
 //---Funciones de Animacion---
 void InicieAnimacion(void){
@@ -126,8 +110,13 @@ void TermineCuadro(void){
 int main(){
 
   const std::vector<double> frecuencies {0.1,0.2,0.4,0.8,1.6,2.0,3.2};
+  int m = 0; //Controla cuándo guardar los datos para la frecuencia en 2.
+  ofstream fout;
+  fout.open("TablaydesvVSF_SinTorque.txt");
 
-  int m = 0;
+  fout<<"frecuencia"<<"\t"<<"xdesv"<<"\t"<<"ydesv"<<"\n";
+  ofstream fout2;
+  fout2.open("dataXYF2.txt");
 
   for (double frecuency : frecuencies){
 
@@ -146,9 +135,7 @@ int main(){
   int Ncuadros=1000; double tdibujo,tcuadro = ttotal/Ncuadros;
   Cuerpo balon;
   Colisionador Newton;
-  int i;
 
- double alcanceXTeorico = vx0*ttotal; //Alcance en X solo con gravedad.
 
 //  InicieAnimacion();
   
@@ -160,9 +147,7 @@ int main(){
 
 
   //CORRO
-  ofstream fout;
-  std::string fileName  = "ydesvF" + to_string(m) + ".txt";
-  fout.open(fileName);
+
 
   for(t=tdibujo=0;t<ttotal;t+=dt,tdibujo+=dt){
 /*
@@ -179,8 +164,9 @@ int main(){
 
     double y = balon.Gety();
     double x = balon.Getx();
-    if(fabs(1 - x/9.0) < 1e-4) {fout<<x<<" "<<y<<endl; break;}
+    if(fabs(1 - x/9.0) < 1e-4) {fout<<frec<<" "<<x<<" "<<y<<endl; break;}
 
+    if(m==5){fout2<<x<<" "<<y<<endl;}
 
 
   balon.Mueva_r(dt,xi);
@@ -197,9 +183,12 @@ int main(){
   if((balon.Getz())< 1e-3 && (t>ttotal/2.0)) break;
   }
 
-  // fout.close();
+
   //  clog<<alcanceXTeorico<<"\t"<<(balon.Getx())<<endl; //Se pasa al archivo la resta entre el valor del alcance de x sin fricció y con fricción.
   m++;
   }
+
+    fout.close();
+    fout2.close();
 return 0;
 }

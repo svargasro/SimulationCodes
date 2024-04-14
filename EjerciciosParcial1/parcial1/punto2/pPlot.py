@@ -28,6 +28,6 @@ axes.set_ylabel('z', fontsize=12)
 axes.legend(loc='upper left')   #
 axes.grid(True, linestyle='--')
 
-axes.set_title("z vs x. Nuevo alcance balón = {} - {} = {}".format(xTeorico, xArrastre, xTeorico-xArrastre), fontsize=12)
+axes.set_title("z vs x. Nuevo alcance balón = {}".format(xArrastre), fontsize=12)
 plt.tight_layout()
 fig.savefig('pPlot.png')

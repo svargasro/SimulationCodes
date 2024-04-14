@@ -3,10 +3,6 @@
 #include "vector.h"
 using namespace std;
 
-//Constantes del problema físico
-const int N=1;
-const double G=1.0;
-
 
 //Constantes del algoritmo de integración
 const double xi=0.1786178958448091;
@@ -24,8 +20,7 @@ class Cuerpo{
 private:
   vector3D r,V,F; double m,R,rho;
 public:
-  void Inicie(double x0,double y0,double z0,
-              double Vx0,double Vy0,double Vz0,double m0,double R0, double rho0);
+  void Inicie(double x0,double y0,double z0, double Vx0,double Vy0,double Vz0,double m0,double R0, double rho0);
   void BorreFuerza(void){F.load(0,0,0);};// Inline
   void SumeFuerza(vector3D dF){F+=dF;};// Inline
 
@@ -41,7 +36,6 @@ class Colisionador{
 private:
 public:
   void CalculeTodasLasFuerzas(Cuerpo &balon);
-  void CalculeFuerzaEntre(Cuerpo & balon1,Cuerpo & balon2);
 };
 
 //-------Implementar las funciones de las clases------
@@ -79,18 +73,8 @@ void Colisionador::CalculeTodasLasFuerzas(Cuerpo &balon){
   vector3D Farrastre = vBalon*(-0.5)*cA*rhoB*areaB*vNorm;
   balon.SumeFuerza(Farrastre);
 
-  //Recorro por parejas, calculo la fuerza de cada pareja y se la sumo a los dos
-  // for(i=0;i<N;i++)
-  //   for(j=0;j<i;j++)
-  //     CalculeFuerzaEntre(balon[i],balon[j]);
 }
-void Colisionador::CalculeFuerzaEntre(Cuerpo & balon1,Cuerpo & balon2){
-  double m1=balon1.m, m2=balon2.m;
-  vector3D r21=balon2.r-balon1.r; double r2=r21.norm2();
-  double aux=G*m2*m1*pow(r2,-1.5);
-  vector3D F1=r21*aux;
-  balon1.SumeFuerza(F1);  balon2.SumeFuerza(F1*(-1));
-}
+
 //----------- Funciones Globales -----------
 //---Funciones de Animacion---
 void InicieAnimacion(void){
@@ -163,7 +147,7 @@ int main(){
 
   if((balon.Getz())< 1e-3 && (t>ttotal/2.0)) break;
   }
-    clog<<alcanceXTeorico<<"\t"<<(balon.Getx())<<endl; //Se pasa al archivo la resta entre el valor del alcance de x sin fricció y con fricción.
+    clog<<alcanceXTeorico<<"\t"<<(balon.Getx())<<endl; //Se pasa al archivo la resta entre el valor del alcance de x sin fricción y con fricción.
 
 
 return 0;
