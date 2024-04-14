@@ -6,17 +6,12 @@ parcial.x: parcial.cpp Makefile pPlot.py plot.gp
 	./parcial.x 2>"data.txt" 1| gnuplot
 	python3 pPlot.py
 #	gnuplot plot.gp
-#	open pPlot.png
+# 	open pPlot.png
 
 
 #	./parcial.x > data.txt
 #	gnuplot plot.gp
 
 
-sanitizer:
-	g++ ${CXXFLAGS} parcial.cpp -o parcial.x
-	./parcial.x
-
-
 clean:
-	rm *.x *.txt
+	rm *.x balon.gif data.txt pPlot.png

@@ -14,10 +14,5 @@ parcial.x: parcial.cpp Makefile pPlot.py plot.gp
 #	gnuplot plot.gp
 
 
-sanitizer:
-	g++ ${CXXFLAGS} parcial.cpp -o parcial.x
-	./parcial.x
-
-
 clean:
-	rm *.x *.txt
+	rm *.x dataXYF2.txt AyVSxYFrecuencia2.png pPlot.png TablaydesvVSF_SinTorque.txt

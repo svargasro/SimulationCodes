@@ -13,10 +13,5 @@ parcial.x: parcial.cpp Makefile pPlot.py plot.gp
 #	gnuplot plot.gp
 
 
-sanitizer:
-	g++ ${CXXFLAGS} parcial.cpp -o parcial.x
-	./parcial.x
-
-
 clean:
 	rm *.x TablaydesvVSF_ConTorque.txt pPlot.png

@@ -20,4 +20,4 @@ axes.grid(True, linestyle='--')
 
 axes.set_title(r"y vs x. Fuerza de Magnus. $f=2 H_z$", fontsize=12)
 plt.tight_layout()
-fig.savefig('AyVSxYFrecuencia2.png')
+fig.savefig('yVSxYFrecuencia2.png')
