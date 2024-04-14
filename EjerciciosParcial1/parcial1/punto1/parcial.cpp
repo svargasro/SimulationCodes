@@ -3,11 +3,6 @@
 #include "vector.h"
 using namespace std;
 
-//Constantes del problema físico
-const int N=1;
-const double G=1.0;
-
-
 //Constantes del algoritmo de integración
 const double xi=0.1786178958448091;
 const double lambda=-0.2123418310626054;
@@ -24,8 +19,7 @@ class Cuerpo{
 private:
   vector3D r,V,F; double m,R;
 public:
-  void Inicie(double x0,double y0,double z0,
-              double Vx0,double Vy0,double Vz0,double m0,double R0);
+  void Inicie(double x0,double y0,double z0, double Vx0,double Vy0,double Vz0,double m0,double R0);
   void BorreFuerza(void){F.load(0,0,0);};// Inline
   void SumeFuerza(vector3D dF){F+=dF;};// Inline
 
@@ -41,7 +35,6 @@ class Colisionador{
 private:
 public:
   void CalculeTodasLasFuerzas(Cuerpo &balon);
-  void CalculeFuerzaEntre(Cuerpo & balon1,Cuerpo & balon2);
 };
 
 //-------Implementar las funciones de las clases------
@@ -61,26 +54,15 @@ void Cuerpo::Dibujese(void){
 }
 //------- Funciones de la clase Colisionador --------
 void Colisionador::CalculeTodasLasFuerzas(Cuerpo &balon){
-  int i,j;
-  //Borro las fuerzas de todos los planetas
+
+  //Borro las fuerzas de todos los balones
   balon.BorreFuerza();
   double g=9.8;
   vector3D Fg;
   Fg.load(0,0,-balon.m*g);
   balon.SumeFuerza(Fg);
+}
 
-  //Recorro por parejas, calculo la fuerza de cada pareja y se la sumo a los dos
-  // for(i=0;i<N;i++)
-  //   for(j=0;j<i;j++)
-  //     CalculeFuerzaEntre(balon[i],balon[j]);
-}
-void Colisionador::CalculeFuerzaEntre(Cuerpo & balon1,Cuerpo & balon2){
-  double m1=balon1.m, m2=balon2.m;
-  vector3D r21=balon2.r-balon1.r; double r2=r21.norm2();
-  double aux=G*m2*m1*pow(r2,-1.5);
-  vector3D F1=r21*aux;
-  balon1.SumeFuerza(F1);  balon2.SumeFuerza(F1*(-1));
-}
 //----------- Funciones Globales -----------
 //---Funciones de Animacion---
 void InicieAnimacion(void){
@@ -103,6 +85,7 @@ void TermineCuadro(void){
 
 int main(){
 
+  //Valores del problema dado.
   double m0 = 0.43;
   double x0=0, y0=0, z0=0;
   double theta0 = 20.0*M_PI/180.0; //gamma
@@ -113,8 +96,6 @@ int main(){
   int Ncuadros=10000; double tdibujo,tcuadro = ttotal/Ncuadros;
   Cuerpo balon;
   Colisionador Newton;
-  int i;
-
 //  double alcanceXTeorico = vx0*ttotal;
 
   InicieAnimacion();
