@@ -27,7 +27,6 @@ def objective(params, density_observed):
 
 #Ajuste de S.
 def optimize_parameters_for_cells(density_observed):
-
     S_initial = np.full(num_cells, 1.0)   #Valores iniciales para S
     bounds = [(1.0, 10.0)] * num_cells    #Restricciones sobre S
     # Optimización usando el método L-BFGS-B (que soporta restricciones de parámetros)
