@@ -1,1 +1,0 @@
-cat sshSala.txt |xclip -selection clipboard

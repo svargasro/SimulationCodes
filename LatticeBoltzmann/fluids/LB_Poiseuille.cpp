@@ -123,8 +123,8 @@ void LatticeBoltzmann::Imprimase(const char * NombreArchivo,double gx,double gy)
 
 int main(void){
   LatticeBoltzmann Aire;
-  int t,tmax=100000;
-  double RHOinicial=1.0, g=0.01;
+  int t,tmax=1000;
+  double RHOinicial=1.0, g=0.0;
   
   Aire.Inicie(RHOinicial,0,0);
   

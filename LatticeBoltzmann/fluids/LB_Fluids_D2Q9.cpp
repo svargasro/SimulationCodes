@@ -140,7 +140,7 @@ void LatticeBoltzmann::Print(const char * NameFile,double Ufan){
 
 int main(void){
   LatticeBoltzmann Air;
-  int t,tmax=10000;
+  int t,tmax=100;
   double rho0=1.0,Ufan0=0.1;
 
   //Start
@@ -156,3 +156,8 @@ int main(void){
  
   return 0;
 }  
+
+
+/*
+plot “WindChannel.dat” w vec
+ */

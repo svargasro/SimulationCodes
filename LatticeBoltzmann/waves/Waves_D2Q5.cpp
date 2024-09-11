@@ -19,23 +19,23 @@ const double UmUtau=1-Utau;
 
 //--------------------- class LatticeBoltzmann ------------
 class LatticeBoltzmann{
-private:
-  double w[Q];      //Weights 
-  int Vx[Q],Vy[Q];  //Velocity vectors
-  double *f, *fnew; //Distribution Functions
-public:
-  LatticeBoltzmann(void);
-  ~LatticeBoltzmann(void);
-  int n(int ix,int iy,int i){return (ix*Ly+iy)*Q+i;};
-  double rho(int ix,int iy,bool UseNew);
-  double Jx(int ix,int iy,bool UseNew);
-  double Jy(int ix,int iy,bool UseNew);
-  double feq(double rho0,double Jx0,double Jy0,int i);
-  void Collision(void);
-  void ImposeFields(int t);
-  void Advection(void);
-  void Start(double rho0,double Jx0,double Jy0);
-  void Print(const char * NombreArchivo);
+  private:
+    double w[Q];      //Weights
+    int Vx[Q],Vy[Q];  //Velocity vectors
+    double *f, *fnew; //Distribution Functions
+  public:
+    LatticeBoltzmann(void);
+    ~LatticeBoltzmann(void);
+    int n(int ix,int iy,int i){return (ix*Ly+iy)*Q+i;};
+    double rho(int ix,int iy,bool UseNew);
+    double Jx(int ix,int iy,bool UseNew);
+    double Jy(int ix,int iy,bool UseNew);
+    double feq(double rho0,double Jx0,double Jy0,int i);
+    void Collision(void);
+    void ImposeFields(int t);
+    void Advection(void);
+    void Start(double rho0,double Jx0,double Jy0);
+    void Print(const char * NombreArchivo);
 };  
 LatticeBoltzmann::LatticeBoltzmann(void){
   //Set the weights
@@ -48,7 +48,7 @@ LatticeBoltzmann::LatticeBoltzmann(void){
   f=new double [ArraySize];  fnew=new double [ArraySize];
 }
 LatticeBoltzmann::~LatticeBoltzmann(void){
-    delete[] f;  delete[] fnew;
+  delete[] f;  delete[] fnew;
 }
 double LatticeBoltzmann::rho(int ix,int iy,bool UseNew){
   double sum; int i,n0;
@@ -85,8 +85,8 @@ void LatticeBoltzmann::Start(double rho0,double Jx0,double Jy0){
   for(ix=0;ix<Lx;ix++) //for each cell
     for(iy=0;iy<Ly;iy++)
       for(i=0;i<Q;i++){ //on each direction
-	n0=n(ix,iy,i);
-	f[n0]=feq(rho0,Jx0,Jy0,i);
+        n0=n(ix,iy,i);
+        f[n0] = feq(rho0,Jx0,Jy0,i);
       }
 }  
 void LatticeBoltzmann::Collision(void){
@@ -96,8 +96,8 @@ void LatticeBoltzmann::Collision(void){
       //compute the macroscopic fields on the cell
       rho0=rho(ix,iy,false); Jx0=Jx(ix,iy,false); Jy0=Jy(ix,iy,false);
       for(i=0;i<Q;i++){ //for each velocity vector
-	n0=n(ix,iy,i);
-	fnew[n0]=UmUtau*f[n0]+Utau*feq(rho0,Jx0,Jy0,i);
+        n0=n(ix,iy,i);
+        fnew[n0]=UmUtau*f[n0]+Utau*feq(rho0,Jx0,Jy0,i);
       }
     }  
 }
@@ -117,9 +117,9 @@ void LatticeBoltzmann::Advection(void){
   for(ix=0;ix<Lx;ix++) //for each cell
     for(iy=0;iy<Ly;iy++)
       for(i=0;i<Q;i++){ //on each direction
-	ixnext=(ix+Vx[i]+Lx)%Lx; iynext=(iy+Vy[i]+Ly)%Ly;
-	n0=n(ix,iy,i); n0next=n(ixnext,iynext,i);
-	f[n0next]=fnew[n0]; //periodic boundaries
+        ixnext=(ix+Vx[i]+Lx)%Lx; iynext=(iy+Vy[i]+Ly)%Ly;
+        n0=n(ix,iy,i); n0next=n(ixnext,iynext,i);
+        f[n0next]=fnew[n0]; //periodic boundaries
       }
 }
 void LatticeBoltzmann::Print(const char * NameFile){
@@ -153,3 +153,21 @@ int main(void){
  
   return 0;
 }  
+
+/*
+set pm3d map
+set size ratio 1
+set xlabel "X"
+set ylabel "Y"
+set zlabel "Z"
+splot "Waves2D.dat"
+
+
+
+set xlabel "X"
+set ylabel "Y"
+set zlabel "Z"
+splot "Waves2D.dat" w l
+
+
+ */
