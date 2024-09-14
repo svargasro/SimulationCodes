@@ -133,7 +133,7 @@ void LatticeBoltzmann::Advection(void){
 }
 void LatticeBoltzmann::Print(const char * NameFile){
   ofstream MyFile(NameFile); double rho0; int ix,iy;
-  for(ix=0;ix<(Lx/2-1);ix++){
+  for(ix=0;ix<(Lx);ix++){
     for(iy=0;iy<Ly;iy++){
       rho0=rho(ix,iy,true);
       MyFile<<ix<<" "<<iy<<" "<<rho0<<endl;
@@ -144,9 +144,18 @@ void LatticeBoltzmann::Print(const char * NameFile){
 }
 
 double LatticeBoltzmann::C(int ix,int iy){
-  double n_luz=1.0;
-  double C=0.5;
-  return C/n_luz;
+  int WC = 32;
+  int icenter= 64;
+  double Ly2 = Ly/2.0;
+  double iyMLy2DLy2= (iy-(Ly2))/(Ly2);
+  double ixRight = sqrt(1-pow(iyMLy2DLy2,2))*WC+icenter;
+  double ixLeft= -ixRight+2*icenter; //Para que quede solo la primera parte negativa.
+
+  double f = (tanh(ix-(ixLeft))+1)*0.3/2.0 +1; //Antes era ix-(ixleft-W)
+  double g = (-tanh(ix-(ixRight))-1)*0.3/2.0;
+  double n = f+g;
+
+  return 0.5/n;
 }
 //--------------- Global Functions ------------
 
