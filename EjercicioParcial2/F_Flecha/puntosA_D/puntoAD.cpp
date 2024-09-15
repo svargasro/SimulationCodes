@@ -330,7 +330,7 @@ vector<double> LatticeBoltzmann::FSobreTriangulo(double nu, double dt, int N, do
   el vector de área apunte hacia afuera del triángulo.
   Así,
 
-  vectorNormal2 = (1/N)(b/2,-a)
+  vectorNormal2 = (1/N)(-b/2,-a)
 
   Por último, para la recta vertical, basta con calcular la norma de una partición y hacerla ir en dirección x.
   vectorNormal3 = (0,b/N)

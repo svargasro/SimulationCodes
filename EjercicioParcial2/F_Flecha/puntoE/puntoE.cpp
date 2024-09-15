@@ -367,15 +367,15 @@ void LatticeBoltzmann::Print(const char * NameFile,double Ufan){
 int main(int argc, char *argv[]) {
 
   LatticeBoltzmann Air;
-  int t,tmax=500;
+  int t,tmax=500.0;
   double rho0=1.0;
   double Ufan0 = 0.1;
   double dt = 1.0;
   double a = 32.0;
   double b = std::stod(argv[1]); //Se recibe Ufan como argumento por consola para facilitar su evaluación.
-  double d = 128;
+  double d = 128.0;
   double nu = dt*(1/3.0)*(tau- 1.0/2);
-  int N = 100;
+  int N = 16;
   vector<double> fTriangulo = {0,0};
 
   double Fx;
@@ -392,10 +392,9 @@ int main(int argc, char *argv[]) {
     Fx = fTriangulo[0];
     TotalFx+=Fx;
     //fout<<Fx<<" "<<Fy<<"\n";
-
   }
   
-  clog<<b<<" "<<TotalFx/tmax<<" "<<"\n";
+  clog<<b<<" "<<TotalFx*(1.0/tmax)<<" "<<"\n";
 
  //Show
 // Air.Print("wind.dat",Ufan0);

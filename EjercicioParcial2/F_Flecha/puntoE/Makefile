@@ -4,6 +4,8 @@ FSANITIZE = -fsanitize=address -fsanitize=leak -fsanitize=undefined
 
 TARGET = puntoE
 
+VALUES = $(shell seq 12 4 40)
+
 all: $(TARGET).png
 
 $(TARGET).out: $(TARGET).cpp
@@ -11,11 +13,10 @@ $(TARGET).out: $(TARGET).cpp
 
 Fxb.dat: $(TARGET).out
 	rm -f *.dat
-	./$(TARGET).out 32 2>> "Fxb.dat"
-	./$(TARGET).out 28 2>> "Fxb.dat"
-	./$(TARGET).out 24 2>> "Fxb.dat"
-	./$(TARGET).out 16 2>> "Fxb.dat"
-	./$(TARGET).out 12 2>> "Fxb.dat"
+	@for value in $(VALUES); do \
+	echo "Ejecutando con b=$$value"; \
+	./$(TARGET).out $$value 2>> "Fxb.dat"; \
+	done
 
 
 
