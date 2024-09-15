@@ -9,19 +9,20 @@ all: $(TARGET).png
 $(TARGET).out: $(TARGET).cpp
 	$(GCC) $(CFLAGS) $(TARGET).cpp -o $(TARGET).out
 
-FxFy.dat: $(TARGET).out
+Fxb.dat: $(TARGET).out
 	rm -f *.dat
-	./$(TARGET).out 32 2>> "FxFy.dat"
-	./$(TARGET).out 28 2>> "FxFy.dat"
-	./$(TARGET).out 24 2>> "FxFy.dat"
-	./$(TARGET).out 16 2>> "FxFy.dat"
-	./$(TARGET).out 12 2>> "FxFy.dat"
+	./$(TARGET).out 32 2>> "Fxb.dat"
+	./$(TARGET).out 28 2>> "Fxb.dat"
+	./$(TARGET).out 24 2>> "Fxb.dat"
+	./$(TARGET).out 16 2>> "Fxb.dat"
+	./$(TARGET).out 12 2>> "Fxb.dat"
 
 
-$(TARGET).png: FxFy.dat plotFyFx.py
-	python3 plotFyFx.py
+
+$(TARGET).png: Fxb.dat plotFxb.py
+	python3 plotFxb.py
 
 .PHONY: clean
 
 clean:
-	rm *.out *.dat *.png
+	rm *.out *.dat

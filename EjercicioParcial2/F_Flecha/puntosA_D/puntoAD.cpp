@@ -210,6 +210,7 @@ double LatticeBoltzmann::sigmayy(double rho0, double eta, double dy_dy){
 
 vector<double> LatticeBoltzmann::interpolationSigma(double x, double y, double nu, double dt){
 /*
+  M es el valor de la celda a la que pertenece un (x,y) arbitrario.
   M*ancho = x + 0  ;   x: punto cualquiera que mido en el plano
   M = x/ancho
 
@@ -231,7 +232,7 @@ vector<double> LatticeBoltzmann::interpolationSigma(double x, double y, double n
   double rho_ix_iy = rho(ix,iy,false);
   double eta_ix_iy = nu*rho_ix_iy;
 
-  vector<double> derivatesIxIy = Derivatives(ix, iy, dt); //{dx_dx, dx_dy, dy_dx, dy_dy}
+  vector<double> derivatesIxIy = Derivatives(ix, iy, dt); //Devuelve las derivadas {dUx_dx, dUx_dy, dUy_dx, dUy_dy}
   double sigmaxx_ix_iy = sigmaxx(rho_ix_iy, eta_ix_iy, derivatesIxIy[0]);
   double sigmaxy_ix_iy = sigmaxy(rho_ix_iy, eta_ix_iy, derivatesIxIy[1],derivatesIxIy[2]);
   double sigmayy_ix_iy = sigmayy(rho_ix_iy, eta_ix_iy, derivatesIxIy[3]);
@@ -240,7 +241,7 @@ vector<double> LatticeBoltzmann::interpolationSigma(double x, double y, double n
   double rho_ixP1_iy = rho(ix+1,iy,false);
   double eta_ixP1_iy = nu*rho_ixP1_iy;
 
-  vector<double> derivatesIxP1Iy = Derivatives(ix+1, iy, dt); //{dx_dx, dx_dy, dy_dx, dy_dy}
+  vector<double> derivatesIxP1Iy = Derivatives(ix+1, iy, dt); //Devuelve las derivadas {dUx_dx, dUx_dy, dUy_dx, dUy_dy}
   double sigmaxx_ixP1_iy = sigmaxx(rho_ixP1_iy, eta_ixP1_iy, derivatesIxP1Iy[0]);
   double sigmaxy_ixP1_iy = sigmaxy(rho_ixP1_iy, eta_ixP1_iy, derivatesIxP1Iy[1],derivatesIxP1Iy[2]);
   double sigmayy_ixP1_iy = sigmayy(rho_ixP1_iy, eta_ixP1_iy, derivatesIxP1Iy[3]);
@@ -249,7 +250,7 @@ vector<double> LatticeBoltzmann::interpolationSigma(double x, double y, double n
   double rho_ix_iyP1 = rho(ix,iy+1,false);
   double eta_ix_iyP1 = nu*rho_ix_iyP1;
 
-  vector<double> derivatesIxIyP1 = Derivatives(ix, iy+1, dt); //{dx_dx, dx_dy, dy_dx, dy_dy}
+  vector<double> derivatesIxIyP1 = Derivatives(ix, iy+1, dt); //Devuelve las derivadas {dUx_dx, dUx_dy, dUy_dx, dUy_dy}
   double sigmaxx_ix_iyP1 = sigmaxx(rho_ix_iyP1, eta_ix_iyP1, derivatesIxIyP1[0]);
   double sigmaxy_ix_iyP1 = sigmaxy(rho_ix_iyP1, eta_ix_iyP1, derivatesIxIyP1[1],derivatesIxIyP1[2]);
   double sigmayy_ix_iyP1 = sigmayy(rho_ix_iyP1, eta_ix_iyP1, derivatesIxIyP1[3]);
@@ -259,12 +260,12 @@ vector<double> LatticeBoltzmann::interpolationSigma(double x, double y, double n
   double rho_ixP1_iyP1 = rho(ix+1,iy+1,false);
   double eta_ixP1_iyP1 = nu*rho_ixP1_iyP1;
 
-  vector<double> derivatesIxP1IyP1 = Derivatives(ix+1, iy+1, dt); //{dx_dx, dx_dy, dy_dx, dy_dy}
+  vector<double> derivatesIxP1IyP1 = Derivatives(ix+1, iy+1, dt); //Devuelve las derivadas {dUx_dx, dUx_dy, dUy_dx, dUy_dy}
   double sigmaxx_ixP1_iyP1 = sigmaxx(rho_ixP1_iyP1, eta_ixP1_iyP1, derivatesIxP1IyP1[0]);
   double sigmaxy_ixP1_iyP1 = sigmaxy(rho_ixP1_iyP1, eta_ixP1_iyP1, derivatesIxP1IyP1[1],derivatesIxP1IyP1[2]);
   double sigmayy_ixP1_iyP1 = sigmayy(rho_ixP1_iyP1, eta_ixP1_iyP1, derivatesIxP1IyP1[3]);
 
-
+  //Se calcula el sigma interpolado de acuerdo a la fórmula dada.
   double interpolatedSigmaXX = sigmaxx_ix_iy*(1-u)*(1-v) + sigmaxx_ixP1_iy*u*(1-v) + sigmaxx_ix_iyP1*(1-u)*v + sigmaxx_ixP1_iyP1*u*v;
   double interpolatedSigmaXY = sigmaxy_ix_iy*(1-u)*(1-v) + sigmaxy_ixP1_iy*u*(1-v) + sigmaxy_ix_iyP1*(1-u)*v + sigmaxy_ixP1_iyP1*u*v;
   double interpolatedSigmaYY = sigmayy_ix_iy*(1-u)*(1-v) + sigmayy_ixP1_iy*u*(1-v) + sigmayy_ix_iyP1*(1-u)*v + sigmayy_ixP1_iyP1*u*v;
@@ -277,19 +278,22 @@ vector<double> LatticeBoltzmann::interpolationSigma(double x, double y, double n
 vector<double> LatticeBoltzmann::dF(double x,double y, double dx, double dy, double nu, double dt){
 
 
-  vector<double> sigmaInterpolated = interpolationSigma(x,y,nu,dt);
+  vector<double> sigmaInterpolated = interpolationSigma(x,y,nu,dt); //Se obtiene sigma interpolado.
 
+  /*
+  Se calcula el diferencial de fuerza como:
+
+  dFi = sigma(ij) dAj
+  * dFx = sigma(xx)dAx + sigma(xy)dAy
+  * dFy = sigma(yx)dAx + sigma(yy)dAy
+
+  dA = (dx,dy)
+*/
   vector<double> fuerza = {sigmaInterpolated[0]*dx+sigmaInterpolated[1]*dy,sigmaInterpolated[1]*dx+sigmaInterpolated[2]*dy};
 
   return fuerza;
 
-/*
-  dFi = sigma(ij) dAj
-  -dFx = sigma(xx)dAx + sigma(xy)dAy
-  -dFy = sigma(yx)dAx + sigma(yy)dAy
 
-  dA = (dx,dy)
-*/
 
 }
 
@@ -297,17 +301,51 @@ vector<double> LatticeBoltzmann::FSobreTriangulo(double nu, double dt, int N, do
 
 /*
   - Recibe el número N de elementos en los que se divide cada fragmento.
-  - El fragmento 1 será el superior. (Explicación detallada en el segundo)
+  - Todos los subíndices 1 corresponden a la recta creciente, los subíndices 2 a la recta decreciente y los subíndices 3 a la vertical.
+  Se tiene que el triángulo está compuesto por 3 puntos: A=(d-a, Ly/2) , B=(d, Ly/2+b/2) y C= (d, Ly/2-b/2)
+  La ecuación de y1 es y1(x)= ((b/2)*a)*(x-d+a) + (Ly/2), de modo que si quiero partir el segmento en 16 partes tendría
+  que cada punto correspondiente al lugar donde se realiza una partición sería:
+  puntoPartición1 = A + (m/N)(a,b/2) donde observe que (a, b/2) viene de la información de la pendiente, pues esa recta
+  siempre avanza b/2 pasos en y por cada a pasos en x.
+  Si estamos interesados en medir los puntos centrales de cada segmento que dividimos, basta con sumarle la puntoPartición1
+  la mitad del primer segmento, para que salte de punto central en punto central.
+  Así:
+  puntoCentral1 = puntoPartición1 + (1/(2N))*(a,b/2) = A + (1/(2N))*(a,b/2) + (m/N)(a,b/2)
+  Así, puntoCentral1 = (d-a, Ly/2) + (1/(2N))*(a,b/2) + (m/N)(a,b/2) , que es lo implementado en el código. (m va desde 0 hasta N-1)
+
+  Con un procedimiento similar, se encontró que:
+  puntoCentral2 = (d, Ly/2+b/2) + (1/(2N))*(a,-b/2) + (m/N)(a,-b/2)
+  puntoCentral3 = (d, Ly/2-b/2) + (1/(2N))*(B-C) + (m/N)(B-C)
+
+  Ahora, para los vectores normales, basta calcular uno por cada segmento del triángulo, pues es el mismo vector normal
+  para todas las particiones del segmento.
+  Para el de la línea creciente, tenemos que el vector que va desde A hasta su primera partición es:
+  puntoPartición1(m=1) - A = (1/N)(a,b/2). Este es el vector que une a A y a su primer punto de partición, por
+  lo que su longitud será dl. Ahora falta la dirección.
+  Si tomamos un vector (x,y), tenemos que (-y,x) siempre va a ser perpendicular a él, por lo que en este caso el vector
+  normal corresponde a:
+  vectorNormal1 = (1/N)(-b/2,a)
+
+  Para el caso de la recta decreciente, se sigue un procedimiento similar, pero en vez de usar (-y,x) se usa (y,-x) para que
+  el vector de área apunte hacia afuera del triángulo.
+  Así,
+
+  vectorNormal2 = (1/N)(b/2,-a)
+
+  Por último, para la recta vertical, basta con calcular la norma de una partición y hacerla ir en dirección x.
+  vectorNormal3 = (0,b/N)
+
 */
 
 
-  vector<double> vectorNormal1 = {-a*(1.0/N),b/(2.0*N)};
-  vector<double> vectorNormal2 = {-a*(1.0/N),-b/(2.0*N)};
+  vector<double> vectorNormal1 = {-b/(2.0*N), a*(1.0/N)};
+  vector<double> vectorNormal2 = {-b/(2.0*N),-a*(1.0/N)};
   vector<double> vectorNormal3 = {(1.0/N)*(b),0};
 
-  cout<<"VectorNormal1: ("<<vectorNormal1[0]<<" "<<vectorNormal1[1]<<")"<<"\n";
-  cout<<"VectorNormal2: ("<<vectorNormal2[0]<<" "<<vectorNormal2[1]<<")"<<"\n";
-  cout<<"VectorNormal3: ("<<vectorNormal3[0]<<" "<<vectorNormal3[1]<<")"<<"\n";
+  // cout<<"VectorNormal1: ("<<vectorNormal1[0]<<" "<<vectorNormal1[1]<<")"<<"\n";
+  // cout<<"VectorNormal2: ("<<vectorNormal2[0]<<" "<<vectorNormal2[1]<<")"<<"\n";
+  // cout<<"VectorNormal3: ("<<vectorNormal3[0]<<" "<<vectorNormal3[1]<<")"<<"\n";
+
   //Guardan la fuerza total.
   double fTotalX = 0;
   double fTotalY = 0;
@@ -316,34 +354,35 @@ vector<double> LatticeBoltzmann::FSobreTriangulo(double nu, double dt, int N, do
   vector<double> vectorInicial2 = {(d-a)+(1.0*a)/(2.0*N),(Ly/2.0)+(-1.0*b)/(4.0*N)};
   vector<double> vectorInicial3 = {d,(Ly/2.0)-(b/2.0)+(b/(2.0*N))};
 
+  double dx1 = vectorNormal1[0];
+  double dy1 = vectorNormal1[1];
+
+  double dx2 = vectorNormal2[0];
+  double dy2 = vectorNormal2[1];
+
+  double dx3 = vectorNormal3[0];
+  double dy3 = vectorNormal3[1];
+
+
   //Se recorre cada línea.
   for (int m=0;m<N; m++) {
 
     double x1Central= vectorInicial1[0]+(m*(1.0/N))*a;
     double y1Central= vectorInicial1[1]+(m*(1.0/N))*(b/(2.0));
 
-    double x2Central= vectorInicial1[0]+(m*(1.0/N))*a;
-    double y2Central= vectorInicial1[1]+(m*(1.0/N))*(-b/(2.0));
+    double x2Central= vectorInicial2[0]+(m*(1.0/N))*a;
+    double y2Central= vectorInicial2[1]+(m*(1.0/N))*(-b/(2.0));
 
     double x3Central= vectorInicial3[0];
     double y3Central= vectorInicial3[1]+(m*(1.0/N))*b;
 
-    double dx1 = vectorNormal1[0];
-    double dy1 = vectorNormal1[1];
-
-    double dx2 = vectorNormal2[0];
-    double dy2 = vectorNormal2[1];
-
-    double dx3 = vectorNormal3[0];
-    double dy3 = vectorNormal3[1];
-
-    cout<<"Vectorx1y1Central: ("<<x1Central<<" "<<y1Central<<")"<<" m:"<<m<<"\n";
-    cout<<"Vectorx2y2Central: ("<<x2Central<<" "<<y2Central<<")"<<" m:"<<m<<"\n";
-    cout<<"Vectorx3y3Central: ("<<x3Central<<" "<<y3Central<<")"<<" m:"<<m<<"\n";
+    // cout<<"\n"<<"Vectorx1y1Central: ("<<x1Central<<" "<<y1Central<<")"<<" m:"<<m<<"\n";
+    // cout<<"Vectorx2y2Central: ("<<x2Central<<" "<<y2Central<<")"<<" m:"<<m<<"\n";
+    // cout<<"Vectorx3y3Central: ("<<x3Central<<" "<<y3Central<<")"<<" m:"<<m<<"\n";
 
     vector<double> fIteracion1 = dF(x1Central,y1Central,dx1,dy1,nu,dt); //Se calcula el dF debido al segmento de la línea creciente.
-    vector<double> fIteracion2 = dF(x2Central,y2Central,dx2,dy2,nu,dt); //Se calcula el dF debido al segmento de la línea creciente.
-    vector<double> fIteracion3 = dF(x3Central,y3Central,dx3,dy3,nu,dt); //Se calcula el dF debido al segmento de la línea creciente.
+    vector<double> fIteracion2 = dF(x2Central,y2Central,dx2,dy2,nu,dt); //Se calcula el dF debido al segmento de la línea decreciente.
+    vector<double> fIteracion3 = dF(x3Central,y3Central,dx3,dy3,nu,dt); //Se calcula el dF debido al segmento de la línea vertical.
 
     fTotalX += fIteracion1[0]+fIteracion2[0]+fIteracion3[0];
     fTotalY += fIteracion1[1]+fIteracion2[1]+fIteracion3[1];
@@ -374,21 +413,17 @@ void LatticeBoltzmann::Print(const char * NameFile,double Ufan){
 
 int main(int argc, char *argv[]) {
 
-
-
-
-
   LatticeBoltzmann Air;
-  int t,tmax=500;
+  int t,tmax=500.0;
   double rho0=1.0;
-  double Ufan0 = 0.1; //Se recibe Ufan como argumento por consola para facilitar su estudio paralelizado.
+  double Ufan0 = 0.1;
   double dt = 1.0;
   double a = 32.0;
   double b = 32.0;
   double d = 128.0;
   double nu = dt*(1/3.0)*(tau- 1.0/2);
   int N = 16;
-  vector<double> fCilindro = {0,0};
+  vector<double> fTriangulo = {0,0};
 
   double Fx;
   double Fy;
@@ -404,10 +439,9 @@ int main(int argc, char *argv[]) {
     Air.Collision();
     Air.ImposeFields(Ufan0,a,b,d);
     Air.Advection();
-    fCilindro = Air.FSobreTriangulo(nu, dt, N, a,b, d); //Se calcula la fuerza total sobre el triangulo.
-    Fx = fCilindro[0];
-    Fy = fCilindro[1];
-    //fout<<Fx<<" "<<Fy<<"\n";
+    fTriangulo = Air.FSobreTriangulo(nu, dt, N, a,b, d); //Se calcula la fuerza total sobre el triangulo.
+    Fx = fTriangulo[0];
+    Fy = fTriangulo[1];
     fout<<t<<" "<<Fx<<" "<<Fy<<"\n";
 
   }

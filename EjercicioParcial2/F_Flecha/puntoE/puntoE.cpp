@@ -296,13 +296,12 @@ vector<double> LatticeBoltzmann::dF(double x,double y, double dx, double dy, dou
 vector<double> LatticeBoltzmann::FSobreTriangulo(double nu, double dt, int N, double a, double b, double d){
 
 /*
-  - Recibe el número N de elementos en los que se divide cada fragmento.
-  - El fragmento 1 será el superior.
+ Para una explicación detallada, refiérase al código del puntoAD.
 */
 
 
-  vector<double> vectorNormal1 = {-a*(1.0/N),b/(2.0*N)};
-  vector<double> vectorNormal2 = {-a*(1.0/N),-b/(2.0*N)};
+  vector<double> vectorNormal1 = {-b/(2.0*N), a*(1.0/N)};
+  vector<double> vectorNormal2 = {-b/(2.0*N),-a*(1.0/N)};
   vector<double> vectorNormal3 = {(1.0/N)*(b),0};
 
   //Guardan la fuerza total.
@@ -313,30 +312,30 @@ vector<double> LatticeBoltzmann::FSobreTriangulo(double nu, double dt, int N, do
   vector<double> vectorInicial2 = {(d-a)+(1.0*a)/(2.0*N),(Ly/2.0)+(-1.0*b)/(4.0*N)};
   vector<double> vectorInicial3 = {d,(Ly/2.0)-(b/2.0)+(b/(2.0*N))};
 
-  //Se recorre cada arco de la circunferencia.
+  double dx1 = vectorNormal1[0];
+  double dy1 = vectorNormal1[1];
+
+  double dx2 = vectorNormal2[0];
+  double dy2 = vectorNormal2[1];
+
+  double dx3 = vectorNormal3[0];
+  double dy3 = vectorNormal3[1];
+
   for (int m=0;m<N; m++) {
 
     double x1Central= vectorInicial1[0]+(m*(1.0/N))*a;
     double y1Central= vectorInicial1[1]+(m*(1.0/N))*(b/(2.0));
 
-    double x2Central= vectorInicial1[0]+(m*(1.0/N))*a;
-    double y2Central= vectorInicial1[1]+(m*(1.0/N))*(-b/(2.0));
+    double x2Central= vectorInicial2[0]+(m*(1.0/N))*a;
+    double y2Central= vectorInicial2[1]+(m*(1.0/N))*(-b/(2.0));
 
     double x3Central= vectorInicial3[0];
     double y3Central= vectorInicial3[1]+(m*(1.0/N))*b;
 
-    double dx1 = vectorNormal1[0];
-    double dy1 = vectorNormal1[1];
 
-    double dx2 = vectorNormal2[0];
-    double dy2 = vectorNormal2[1];
-
-    double dx3 = vectorNormal3[0];
-    double dy3 = vectorNormal3[1];
-
-    vector<double> fIteracion1 = dF(x1Central,y1Central,dx1,dy1,nu,dt); //Se calcula el dF debido al segmento de la línea creciente.
-    vector<double> fIteracion2 = dF(x2Central,y2Central,dx2,dy2,nu,dt); //Se calcula el dF debido al segmento de la línea creciente.
-    vector<double> fIteracion3 = dF(x3Central,y3Central,dx3,dy3,nu,dt); //Se calcula el dF debido al segmento de la línea creciente.
+    vector<double> fIteracion1 = dF(x1Central,y1Central,dx1,dy1,nu,dt);
+    vector<double> fIteracion2 = dF(x2Central,y2Central,dx2,dy2,nu,dt);
+    vector<double> fIteracion3 = dF(x3Central,y3Central,dx3,dy3,nu,dt);
 
     fTotalX += fIteracion1[0]+fIteracion2[0]+fIteracion3[0];
     fTotalY += fIteracion1[1]+fIteracion2[1]+fIteracion3[1];
@@ -367,24 +366,19 @@ void LatticeBoltzmann::Print(const char * NameFile,double Ufan){
 
 int main(int argc, char *argv[]) {
 
-
-
-
-
   LatticeBoltzmann Air;
   int t,tmax=500;
   double rho0=1.0;
-  double Ufan0 = 0.1; //Se recibe Ufan como argumento por consola para facilitar su estudio paralelizado.
-  double dt = 0.1;
+  double Ufan0 = 0.1;
+  double dt = 1.0;
   double a = 32.0;
-  double b = std::stod(argv[1]);
+  double b = std::stod(argv[1]); //Se recibe Ufan como argumento por consola para facilitar su evaluación.
   double d = 128;
   double nu = dt*(1/3.0)*(tau- 1.0/2);
   int N = 100;
-  vector<double> fCilindro = {0,0};
+  vector<double> fTriangulo = {0,0};
 
   double Fx;
-  double Fy;
   double TotalFx=0;
   //Start
   Air.Start(rho0,Ufan0,0);
@@ -394,15 +388,14 @@ int main(int argc, char *argv[]) {
     Air.ImposeFields(Ufan0,a,b,d);
     Air.Advection();
 
-    fCilindro = Air.FSobreTriangulo(nu, dt, N, a,b, d); //Se calcula la fuerza total sobre el triangulo.
-    Fx = fCilindro[0];
-    Fy = fCilindro[1];
+    fTriangulo = Air.FSobreTriangulo(nu, dt, N, a,b, d); //Se calcula la fuerza total sobre el triangulo.
+    Fx = fTriangulo[0];
     TotalFx+=Fx;
     //fout<<Fx<<" "<<Fy<<"\n";
 
   }
   
-  clog<<b<<" "<<TotalFx/500.0<<" "<<"\n";
+  clog<<b<<" "<<TotalFx/tmax<<" "<<"\n";
 
  //Show
 // Air.Print("wind.dat",Ufan0);

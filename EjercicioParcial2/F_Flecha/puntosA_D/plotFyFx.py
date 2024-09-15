@@ -8,15 +8,15 @@ data = np.loadtxt('FxFy.dat')
 t = data[:, 0]
 Fx = data[:, 1]
 Fy = data[:, 2]
-
+FxProm= np.mean(Fx)
 # Crear una figura con dos subplots (1 fila, 2 columnas)
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
 # Primer subplot: Gráfico de Fx vs t
-ax1.scatter(t, Fx, color='b', label='Fx')
+ax1.scatter(t, Fx, color='b', label=f'Fx_promedio={FxProm:.2f}, b=32')
 ax1.set_xlabel('Tiempo (t)')
 ax1.set_ylabel('Fx(t)')
-ax1.set_title('Fx vs t')
+ax1.set_title('Fx vs t.')
 ax1.grid(True)
 ax1.legend()
 

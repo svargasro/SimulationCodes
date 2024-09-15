@@ -19,4 +19,4 @@ $(TARGET).png FX_FY_t.png: wind.dat plot.py plotFyFx.py
 .PHONY: clean
 
 clean:
-	rm *.out *.dat *.png
+	rm *.out *.dat
