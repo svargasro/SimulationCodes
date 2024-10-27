@@ -3,7 +3,7 @@ from scipy.optimize import minimize
 
 #Tamaño del sistema.
 Lx=2
-Ly=50
+Ly=10
 num_cells = Lx*Ly
 
 #Función que hace el papel de la simulación de LatticeBoltzmann

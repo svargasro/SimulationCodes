@@ -35,7 +35,7 @@ void LatticeGas::Borrese(void){
 void LatticeGas::Inicie(double mu,double sigma){
   for(int ix=0;ix<Lx;ix++)
     for(int i=0;i<Q;i++)
-      f[ix][i]=fnew[ix][i]=0.5/(sigma*sqrt(2*M_PI))*exp(-0.5*pow((ix-mu)/sigma,2.0));
+      f[ix][i]=fnew[ix][i]=0.5/(sigma*sqrt(2*M_PI))*exp(-0.5*pow((ix-mu)/sigma,2.0)); //Densidad de probabilidad.
 }
 double LatticeGas::rho(int ix,bool UseNew){
   if(UseNew)
@@ -77,7 +77,6 @@ double LatticeGas::GetSigma2(void){
   for(ix=0;ix<Lx;ix++)
     Sigma2+=pow(ix-xprom,2.0)*rho(ix,true);
   Sigma2/=N;
-
   return Sigma2;
 }
 

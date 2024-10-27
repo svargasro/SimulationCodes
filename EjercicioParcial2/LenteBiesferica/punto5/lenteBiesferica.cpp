@@ -133,7 +133,7 @@ void LatticeBoltzmann::Advection(void){
 }
 void LatticeBoltzmann::Print(const char * NameFile){
   ofstream MyFile(NameFile); double rho0; int ix,iy;
-  for(ix=0;ix<(Lx);ix++){
+  for(ix=0;ix<(Lx/2);ix++){
     for(iy=0;iy<Ly;iy++){
       rho0=rho(ix,iy,true);
       MyFile<<ix<<" "<<iy<<" "<<rho0<<endl;

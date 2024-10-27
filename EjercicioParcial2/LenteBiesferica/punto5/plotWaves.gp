@@ -7,10 +7,9 @@ set ylabel "Y" font "Arial,14"
 set autoscale xfix
 set autoscale yfix
 #set xrange [32:96]  # Define el rango del eje X
-
-
 #set xtics 1         # Establece los tics en intervalos de 1
-#set xtics format "" # Oculta los valores numéricos en el eje X
+set xtics format "" # Oculta los valores numéricos en el eje X
+
 
 splot "Waves2D.dat"
 
