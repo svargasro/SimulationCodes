@@ -3,61 +3,61 @@
 This repository contains various simulation codes developed during the course on Physical Systems Simulation. The files are organized into several directories based on their functionality and purpose.
 
 * Directory Structure
-** exercises**
+** exercises
    This directory contains files corresponding to midterm exams conducted in the Physical Systems Simulation course.
 
-   - **midterm1**
+*** **midterm1**
      - *bolaPingPong*: Simulation codes related to the ping pong ball dynamics.
      - *cunaNewton*: Simulation code related to Newton's cradle.
      - *midterm1*: Contains various points related to the first midterm exam, related to Magnus Force Simulation.
-   - **midterm2**
+*** **midterm2**
      - *F_Flecha*: Examining forces acting on a projectile (arrow).
      - *LenteBiesferica*: Simulations related to a biconvex lens.
 
-** loginScripts**
+** loginScripts
    This directory contains shell scripts with commands for accessing the university's computer labs.
    - *loginComputerLab.sh*: Script for logging into the computer lab.
    - *loginMaxwellComputer.sh*: Script for accessing the Maxwell computer lab.
-** src**
+** src
    This directory contains all source code files organized into subdirectories based on their specific topics. The following are the key components of this directory:
-   - **LatticeBoltzmann**
+
+*** LatticeBoltzmann
      This directory is dedicated to simulations using the Lattice Boltzmann method and is divided into three key areas:
-     - **electroMagnetic**
+**** electroMagnetic
        - *EMLBM_Dielectric.cpp*: Code for simulating electromagnetic fields in dielectric materials using Lattice Boltzmann methods.
        - *EMLBM_Skin.cpp*: Code for simulating skin effect in conductive materials.
-
-     - **fluids**
+**** fluids
        - *LB_Fluids_D2Q9.cpp*: Simulation of fluid dynamics using the D2Q9 lattice configuration.
        - *LB_Poiseuille.cpp*: Simulation of Poiseuille flow in a channel using Lattice Boltzmann methods.
        - *plotFluids.gp*: Gnuplot script for visualizing fluid simulation results.
 
-     - **waves**
+**** waves
        - *plotWaves.gp*: Gnuplot script for visualizing wave propagation results.
        - *Waves_D2Q5.cpp*: Simulation code for wave propagation using the D2Q5 lattice configuration.
 
-   - **BrownianDynamics**
+*** BrownianDynamics
      This subdirectory contains simulations related to Brownian motion.
      - *pollenDiffusion.cpp*: C++ implementation simulating the diffusion of pollen particles.
      - *Random64.h*: Header file providing random number generation utilities.
 
-   - **CUDA**
+*** CUDA
      Contains Jupyter Notebook files that demonstrate simulations using CUDA for parallel computing.
      - *Adding_two_1D_arrays_on_CUDA_Google_Colab.ipynb*: A notebook that illustrates the addition of two 1D arrays using CUDA.
      - *LBwavesD2Q5_on_CUDA_Google_Colab.ipynb*: A notebook focused on simulating Lattice Boltzmann waves in a D2Q5 lattice using CUDA.
 
-   - **DiscreteElements**
+*** DiscreteElements
      This directory includes simulations of discrete element methods with several subdirectories:
-     - **Ball**
+**** Ball
        - *Ball.cpp*: C++ code simulating the behavior of a ball under various conditions.
 
-     - **Collider**
+**** Collider
        - *Collider.cpp*: Code for simulating evolution of the orbit of two planets.
        - *vector.h*: Header file for vector operations.
-     - **Gas2D**
+**** Gas2D
        - *Molecules.cpp*: Code simulating 2D gas molecules.
-     - **Grains**
+**** Grains
        - *Grains2D.cpp*: C++ code simulating granular material behavior in 2D.
-     - **Planet**
+**** Planet
        - Contains various implementations of planetary motion simulations.
        - *PlanetaEuler.py*: Python implementation of Euler's method for planetary motion.
        - *PlanetaForestRuth.py*: Implementation of the Forest-Ruth method for simulating planetary orbits.
@@ -67,21 +67,20 @@ This repository contains various simulation codes developed during the course on
        - *Planet.cpp*: C++ code for simulating the dynamics of planets.
        - *plot.gp*: Gnuplot script for visualizing planetary motion results.
        - *vector.h*: Header file for vector operations.
-     - **vectorsImplementation**
+**** vectorsImplementation
        - *BallVector.cpp*: Implementation of vector operations for ball dynamics.
        - *PlanetaConstructor.cpp*: Code for constructing planet simulations.
        - *plot.gp*: Gnuplot script for visualizing vector simulation results.
 
-   - **LatticeGas**
+*** LatticeGas
      This directory contains simulations related to Lattice Gas models:
      - *Continuous_LatticeGas1D.cpp*: Code simulating a continuous Lattice Gas in one dimension.
      - *Discrete_LatticeGas1D.cpp*: Code simulating a discrete Lattice Gas in one dimension.
 
-   - **RotationAlgorithms**
+*** RotationAlgorithms
      This subdirectory focuses on algorithms for rotational dynamics:
      - *topRotationQuaternions.cpp*: Code for simulating the rotation of a spinning top using quaternion mathematics.
-
-   - **RungeKutta**
+*** RungeKutta
      This directory contains implementations of the Runge-Kutta method for solving ordinary differential equations:
      - *Euler.cpp*: Implementation of the Euler method.
      - *RungeKutta4CondFrontera.cpp*: Fourth-order Runge-Kutta method with boundary conditions.
