@@ -6,11 +6,11 @@ This repository contains various simulation codes developed during the course on
 ** exercises
    This directory contains files corresponding to midterm exams conducted in the Physical Systems Simulation course.
 
-*** **midterm1**
+*** midterm1
      - *bolaPingPong*: Simulation codes related to the ping pong ball dynamics.
      - *cunaNewton*: Simulation code related to Newton's cradle.
      - *midterm1*: Contains various points related to the first midterm exam, related to Magnus Force Simulation.
-*** **midterm2**
+*** midterm2
      - *F_Flecha*: Examining forces acting on a projectile (arrow).
      - *LenteBiesferica*: Simulations related to a biconvex lens.
 
